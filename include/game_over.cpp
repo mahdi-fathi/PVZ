@@ -1,0 +1,1 @@
+/*this inherites screen and is for gameover screen*/
