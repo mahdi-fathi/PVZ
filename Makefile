@@ -10,6 +10,9 @@ MEDIA_PATH = ./files/
 SOURCES := $(wildcard $(SRCDIR)/*.cpp)
 OBJECTS := $(SOURCES:$(SRCDIR)/%.cpp=$(OBJDIR)/%.o)
 
+# debug: $(SOURCES)
+# 	$(CXX) $(CXXFLAGS) -o $(EXECUTABLE) $(SOURCES) $(LFLAGS)
+
 all: $(EXECUTABLE)
 
 $(EXECUTABLE): $(OBJECTS)
