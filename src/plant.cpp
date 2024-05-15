@@ -3,14 +3,8 @@
 Plant::Plant(RenderWindow &window, Vector2f position) : windowptr(&window)
 {
     pos = position;
-    if (!plant_texture.loadFromFile(PICS_PATH + "ps/" + "ps1.png"))
-    {
-        cout << "file not opened";
-        return;
-    }
-    plant_sprite.setTexture(plant_texture);
-    plant_sprite.setScale(2, 2);
-    plant_sprite.setPosition(pos);
+    
+ 
 }
 
 Plant::~Plant()
@@ -69,3 +63,4 @@ void Plant::update()
     }
     plant_sprite.setPosition(pos);
 }
+

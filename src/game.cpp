@@ -22,16 +22,18 @@ void Game::update()
     switch (state)
     {
     case IN_GAME:
-    if(!plants.empty()){
-        for (int i = 0; i<plants.size();i++)
+        if (!plants.empty())
         {
-            if (!plants[i]->get_is_placed() && !plants[i]->get_is_dragging())
+            for (int i = 0; i < plants.size(); i++)
             {
-                plants.erase(plants.begin()+i);
+                if (!plants[i]->get_is_placed() && !plants[i]->get_is_dragging())
+                {
+                    plants.erase(plants.begin() + i);
+                }
+
+                plants[i]->update();
             }
-            
-            plants[i]->update();
-        }}
+        }
 
         break;
     case MAIN_MENU:
@@ -59,42 +61,50 @@ void Game::process_input()
         case IN_GAME:
             if (event.type == Event::Closed)
             {
+                state = EXIT;
                 window.close();
             }
             else if (event.type == Event::MouseButtonPressed)
             {
-                if (bar.check_mouse_press(event,window) == 1)
+                if (bar.check_mouse_press(event, window) == 0)
                 {
-                    auto plant = make_unique<Plant>(window,bar.card_position(1));
+                    unique_ptr<Plant> plant = make_unique<Sunflower>(window, bar.card_position(0));
                     plants.push_back(move(plant));
                 }
-                if (bar.check_mouse_press(event,window) == 1)
+                if (bar.check_mouse_press(event, window) == 1)
                 {
-                    auto plant = make_unique<Plant>(window,bar.card_position(1));
+                    unique_ptr<Plant> plant = make_unique<Peashooter>(window, bar.card_position(1));
                     plants.push_back(move(plant));
                 }
-                if (bar.check_mouse_press(event,window) == 1)
-                {
-                    auto plant = make_unique<Plant>(window,bar.card_position(1));
-                    plants.push_back(move(plant));
-                }
-                if (bar.check_mouse_press(event,window) == 1)
-                {
-                    auto plant = make_unique<Plant>(window,bar.card_position(1));
-                    plants.push_back(move(plant));
-                }
+                // else if (bar.check_mouse_press(event,window) == 3)
+                // {
+                //     unique_ptr<Plant> plant = make_unique<Plant>(window,bar.card_position(2));
+                //     plants.push_back(move(plant));
+                // }
+                // else if (bar.check_mouse_press(event,window) == 4)
+                // {
+                //     unique_ptr<Plant> plant = make_unique<Plant>(window,bar.card_position(3));
+                //     plants.push_back(move(plant));
+                // }
                 if (!plants.empty())
                     plants.back()->handle_mouse_press(event);
             }
             else if (event.type == Event::MouseButtonReleased)
             {
-                if (!plants.empty()){
-                plants.back()->handle_mouse_release(event, playground.get_grid());
-                if (plants.back()->get_plant_tile() == -1)
+                if (!plants.empty())
                 {
-                    plants.pop_back();
-                }
-                
+                    plants.back()->handle_mouse_release(event, playground.get_grid());
+                    if (plants.back()->get_plant_tile() == -1)
+                    {
+                        plants.pop_back();
+                        return;
+                    }
+                    for (int i = 0; i < plants.size()-1; i++)
+                    {
+                        if (playground.get_grid()[plants.back()->get_plant_tile()].contains(plants[i]->get_position())){
+                            plants.pop_back();
+                            return;}
+                    }
                 }
             }
 
@@ -123,17 +133,16 @@ void Game::render()
     case IN_GAME:
         playground.render(window);
         bar.render(window);
-        if(!plants.empty()){
-        for (int i=0; i<plants.size();i++)
+        if (!plants.empty())
         {
-            // if (plants[i]->get_is_placed() || plants[i]->get_is_dragging())
-            // {
-            plants[i]->render();    /* code */
-            // }
-            
-            
-        }}
-        
+            for (int i = 0; i < plants.size(); i++)
+            {
+                // if (plants[i]->get_is_placed() || plants[i]->get_is_dragging())
+                // {
+                plants[i]->render(); /* code */
+                // }
+            }
+        }
 
         break;
     case MAIN_MENU:

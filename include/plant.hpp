@@ -1,8 +1,10 @@
+#ifndef PLANT_HPP
+#define PLANT_HPP
 #include "global.hpp"
 
 class Plant
 {
-private:
+protected:
     bool is_dragging = false;
     bool is_placed = false;
     // bool is_spawned = false;
@@ -14,7 +16,7 @@ private:
 public:
     Plant(RenderWindow &window, Vector2f position);
     ~Plant();
-    // Vector2f get_position(){return pos;}
+    Vector2f get_position(){return pos;}
     // void set_position(Vector2f position){pos = position;}
     bool get_is_dragging(){return is_dragging;}
     bool get_is_placed(){return is_placed;}
@@ -24,4 +26,4 @@ public:
     void update();
     void render();
 };
-    
+#endif

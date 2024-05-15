@@ -1,9 +1,11 @@
 #ifndef GAME_HPP
 #define GAME_HPP    
 #include "global.hpp"
-#include "plant.hpp"
+// #include "plant.hpp"
 #include "plant_bar.hpp"
 #include "field.hpp"
+#include "peashooter.hpp"
+#include "sunflower.hpp"
 
 enum State {
     IN_GAME,
