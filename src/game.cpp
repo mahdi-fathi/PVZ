@@ -22,6 +22,7 @@ void Game::update()
     switch (state)
     {
     case IN_GAME:
+        spawn_zombies(5);
         if (!plants.empty())
         {
             for (int i = 0; i < plants.size(); i++)
@@ -34,7 +35,13 @@ void Game::update()
                 plants[i]->update();
             }
         }
-
+        if (!zombies.empty())
+        {
+            for (int i = 0; i < zombies.size(); i++)
+            {
+                zombies[i]->update();
+            }
+        }
         break;
     case MAIN_MENU:
         break;
@@ -76,12 +83,12 @@ void Game::process_input()
                     unique_ptr<Plant> plant = make_unique<Peashooter>(window, bar.card_position(1));
                     plants.push_back(move(plant));
                 }
+                else if (bar.check_mouse_press(event,window) == 2)
+                {
+                    unique_ptr<Plant> plant = make_unique<Wallnut>(window,bar.card_position(2));
+                    plants.push_back(move(plant));
+                }
                 // else if (bar.check_mouse_press(event,window) == 3)
-                // {
-                //     unique_ptr<Plant> plant = make_unique<Plant>(window,bar.card_position(2));
-                //     plants.push_back(move(plant));
-                // }
-                // else if (bar.check_mouse_press(event,window) == 4)
                 // {
                 //     unique_ptr<Plant> plant = make_unique<Plant>(window,bar.card_position(3));
                 //     plants.push_back(move(plant));
@@ -99,11 +106,13 @@ void Game::process_input()
                         plants.pop_back();
                         return;
                     }
-                    for (int i = 0; i < plants.size()-1; i++)
+                    for (int i = 0; i < plants.size() - 1; i++)
                     {
-                        if (playground.get_grid()[plants.back()->get_plant_tile()].contains(plants[i]->get_position())){
+                        if (playground.get_grid()[plants.back()->get_plant_tile()].contains(plants[i]->get_position()))
+                        {
                             plants.pop_back();
-                            return;}
+                            return;
+                        }
                     }
                 }
             }
@@ -137,10 +146,14 @@ void Game::render()
         {
             for (int i = 0; i < plants.size(); i++)
             {
-                // if (plants[i]->get_is_placed() || plants[i]->get_is_dragging())
-                // {
-                plants[i]->render(); /* code */
-                // }
+                plants[i]->render();
+            }
+        }
+        if (!zombies.empty())
+        {
+            for (int i = 0; i < zombies.size(); i++)
+            {
+                zombies[i]->render();
             }
         }
 
@@ -159,6 +172,19 @@ void Game::render()
         break;
     }
     window.display();
+}
+
+void Game::spawn_zombies(float time)
+{
+    elapsed_time += clock.restart().asSeconds();
+    if (elapsed_time >= time)
+    {
+        srand(static_cast<unsigned int>(std::time(nullptr)));
+        int row = rand() % 6;
+        elapsed_time = 0;
+        unique_ptr<Zombie> zombie = make_unique<Zombie>(window, row, playground.get_grid());
+        zombies.push_back(move(zombie));
+    }
 }
 
 void Game::run()

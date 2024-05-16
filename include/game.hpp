@@ -6,6 +6,8 @@
 #include "field.hpp"
 #include "peashooter.hpp"
 #include "sunflower.hpp"
+#include "wallnut.hpp"
+#include "zombie.hpp"
 
 enum State {
     IN_GAME,
@@ -21,8 +23,11 @@ class Game
 {
 private:
     State state;
+    Clock clock; 
+    float elapsed_time = 0;
     RenderWindow window;
     vector<unique_ptr<Plant>> plants;
+    vector<unique_ptr<Zombie>> zombies;
     PlantBar bar;
     Field playground;
     void render();
@@ -30,7 +35,7 @@ private:
     void process_input();
     void handle_mouse_get();
     void handle_mouse_release();
-    void handle_plant_placing();
+    void spawn_zombies(float time);
     Texture background_texture;
     Sprite background_sprite;
 public:
