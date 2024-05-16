@@ -7,12 +7,16 @@ class Plant
 protected:
     bool is_dragging = false;
     bool is_placed = false;
+    // virtual void attack() = 0; 
     // bool is_spawned = false;
     RenderWindow *windowptr;
-    Texture plant_texture;
-    Sprite plant_sprite;
+    vector<Texture> plant_textures;
+    vector<Sprite> plant_sprites;
     int plant_tile;
     Vector2f pos;
+    Clock clock;
+    float delta_time = 0;
+    int frame_index = 0;
 public:
     Plant(RenderWindow &window, Vector2f position);
     ~Plant();

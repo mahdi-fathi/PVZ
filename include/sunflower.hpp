@@ -5,7 +5,7 @@
 class Sunflower : public Plant
 {
 private:
-
+    // void attack();
 public:
     Sunflower(RenderWindow &window, Vector2f position);
     ~Sunflower();

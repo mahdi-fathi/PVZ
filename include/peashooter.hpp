@@ -5,7 +5,7 @@
 class Peashooter : public Plant
 {
 private:
-
+    // void attack();
 public:
     Peashooter(RenderWindow &window, Vector2f position);
     ~Peashooter();

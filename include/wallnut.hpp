@@ -5,6 +5,7 @@
 class Wallnut : public Plant
 {
 private:
+    // void attack();
 
 public:
     Wallnut(RenderWindow &window, Vector2f position);
